@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="xdb6">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/OJDBC-Full/xdb6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
