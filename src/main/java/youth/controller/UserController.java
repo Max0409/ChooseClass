@@ -10,6 +10,8 @@ import youth.dao.SubjectRepository;
 import youth.model.Choice;
 import youth.model.Subject;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 //访问：localhost:8080/user/hello，路径中不用加cloud
@@ -55,10 +57,15 @@ public class UserController {
 登录
  */
     @PostMapping("/login")
-    public boolean login(String id, String password) {
+    public boolean login(HttpServletResponse response, String id, String password) {
 
         try {
             if (studentRepository.findBySId(id).getPassword().equals(password)){
+                Cookie userCookie=new Cookie("id",id);
+
+                userCookie.setMaxAge(30*24*60*60);   //存活期为一个月 30*24*60*60
+                userCookie.setPath("/");
+                response.addCookie(userCookie);
                 return true;
             }else {
                 return false;
