@@ -96,6 +96,8 @@ public class UserController {
 退课
  */
     @PostMapping("/deleteSubject")
+
+
     public boolean deleteSubject(String s_id, String c_id) {
 
         try{
