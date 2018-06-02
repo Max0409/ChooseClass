@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="dataSourceStorageLocal">
-    <data-source name="@localhost" uuid="6e8e0691-e6a6-44f1-b66b-f0d8aa9350f3">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
-      <introspection-schemas>*:MAX</introspection-schemas>
-    </data-source>
-  </component>
-</project>
