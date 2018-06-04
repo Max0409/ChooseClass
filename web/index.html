@@ -44,7 +44,7 @@
                 </li>
 				<li id="welcomeUser" style="display: none">
                     <a class="dropdown-button waves-effect waves-dark" data-activates="dropdown1">
-                        <i class="fa fa-user fa-fw"></i><b id="user"></b>
+                        <i class="fa fa-user fa-fw"></i><b id="user">151250051</b>
                         <i class="material-icons right">arrow_drop_down</i>
                     </a>
                 </li>
@@ -72,12 +72,12 @@
         </div>
 		<!-- Dropdown Structure -->
 			<ul id="dropdown1" class="dropdown-content">
-				<li><a href="#"><i class="fa fa-user fa-fw"></i> My Profile</a>
+				<li><a id="person_info_btn"><i class="fa fa-user fa-fw"></i> 个人信息</a>
 				</li>
-				<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-				</li>
-				<li><a href="#"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
-				</li>
+				<!--<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>-->
+				<!--</li>-->
+				<!--<li><a href="#"><i class="fa fa-sign-out fa-fw"></i>Logout</a>-->
+				<!--</li>-->
 			</ul>
         <ul id="dropdown2" class="dropdown-content dropdown-tasks w250 taskList">
 			<li>
@@ -150,12 +150,12 @@
                 <h1 class="page-header">个人中心</h1>
                 <ol class="breadcrumb">
                   <li><a href="#">首页</a></li>
-                  <li class="active">我的课程</li>
+                  <li class="active" id="view">我的课程</li>
                 </ol>
             </div>
 
             <div class="container">
-                <table class="table" style="width: 1000px">
+                <table id="course_table" class="table" style="width: 1000px">
                     <tr>
                         <th>课程编号</th>
                         <th>课程名字</th>
@@ -166,6 +166,23 @@
                         <th>课程操作</th>
                     </tr>
                 </table>
+
+                <div id="person_info" class="row" style="display: none">
+                    <div class="person-panel">
+                        <div class="col-lg-6">
+                            <h4>学号 : </h4>
+                            <h4>姓名 : </h4>
+                            <h4>性别 : </h4>
+                            <h4>主修专业 : </h4>
+                        </div>
+                        <div class="col-lg-6" style="color: grey">
+                            <h4 id="s_id">151250051</h4>
+                            <h4 id="s_name"></h4>
+                            <h4 id="gender"></h4>
+                            <h4 id="major"></h4>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -183,6 +200,7 @@
     <script src="resource/js/jquery.metisMenu.js"></script>
 
     <script src="resource/systemJS/login.js"></script>
+    <script src="resource/systemJS/index.js"></script>
 
 </body>
 
