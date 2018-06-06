@@ -2,6 +2,7 @@ package youth.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import youth.dao.ChoiceRepository;
@@ -11,6 +12,7 @@ import youth.model.Choice;
 import youth.model.Subject;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -61,7 +63,8 @@ public class UserController {
 
         try {
             if (studentRepository.findBySId(id).getPassword().equals(password)){
-                Cookie userCookie=new Cookie("id",id);
+                Cookie userCookie=new Cookie(id,id);
+
 
                 userCookie.setMaxAge(30*24*60*60);   //存活期为一个月 30*24*60*60
                 userCookie.setPath("/");
@@ -77,11 +80,27 @@ public class UserController {
 
     }
 
+    //得到当前用户id
+    @PostMapping("/getLoginId")
+    public String getLoginId(HttpServletRequest request) {
+
+        Cookie[] cookies = request.getCookies();//这样便可以获取一个cookie数组
+        if (null==cookies) {
+            System.out.println("没有cookie=========");
+        } else {
+            for(Cookie cookie : cookies){
+                System.out.println("name:"+cookie.getName()+",value:"+ cookie.getValue());
+            }
+        }
+        return cookies[1].getName();
+
+    }
+
 
     /*
 选课
  */
-    @PostMapping("/chooseSubject")
+    @PostMapping(value = "/B_Subject", produces = "application/xml")
     public boolean chooseSubject(String s_id, String c_id) {
 
        try{
