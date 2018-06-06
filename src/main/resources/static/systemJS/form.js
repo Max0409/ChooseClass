@@ -5,9 +5,8 @@ $().ready(function () {
 function load() {
     $.ajax({
         type: 'GET',
-        url: '/B_Subject',
+        url: '/user/B_Subject',
         success: function (result) {
-            console.log(result);
             for (let i = 0; i < result.length; i++) {
                 let course = result[i];
                 $('#college').append(
@@ -20,9 +19,8 @@ function load() {
                     '<td><button class="btn btn-link" id="choose_'+ i +'">选课</button></td>' +
                     '</tr>' +
                     '<script>' +
-                    'let s_id = $("#user").val();' +
-                    '$("#choose_"' + i + ').click(function() {' +
-                    'chooseClass(s_id, course.id)' +
+                    '$("#choose_' + i + '").click(function() {' +
+                    'chooseClass("' + course.id + '", ' + i + ')' +
                     '});' +
                     '</script>'
                 );
@@ -36,15 +34,18 @@ function load() {
     })
 }
 
-function chooseClass(s_id, c_id) {
+function chooseClass(c_id, i) {
+    console.log(i);
+    let s_id = $("#user").val();
     $.ajax({
         type: 'POST',
-        url: '/chooseSubject',
+        url: '/user/B_Subject',
         data: {
             s_id: s_id,
             c_id: c_id
         },
         success: function (result) {
+            $('#choose_' + i).innerText = "退课";
 
         },
         error: function (xhr, status, error) {
