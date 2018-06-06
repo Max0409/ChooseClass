@@ -7,7 +7,7 @@ $('#login').click(
     function () {
         let s_id = $('#username').val();
         let password = $('#password').val();
-        
+
         $.ajax({
             type: 'POST',
             url: '/login',
