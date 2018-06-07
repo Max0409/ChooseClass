@@ -87,12 +87,13 @@ public class UserController {
         Cookie[] cookies = request.getCookies();//这样便可以获取一个cookie数组
         if (null==cookies) {
             System.out.println("没有cookie=========");
+            return null;
         } else {
             for(Cookie cookie : cookies){
                 System.out.println("name:"+cookie.getName()+",value:"+ cookie.getValue());
             }
         }
-        return cookies[1].getName();
+        return cookies[3].getName();
 
     }
 

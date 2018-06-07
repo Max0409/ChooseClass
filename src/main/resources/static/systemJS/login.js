@@ -1,6 +1,6 @@
 
 $().ready(function () {
-
+    check();
 });
 
 $('#login').click(
@@ -10,14 +10,15 @@ $('#login').click(
 
         $.ajax({
             type: 'POST',
-            url: '/login',
+            url: '/user/login',
             data: {
                 id: s_id,
                 password: password
             },
             success: function (result) {
-                console.log("success");
-                location.reload();
+                $('#loginAndSign').hide();
+                document.getElementById("user").innerText = s_id;
+                $('#welcomeUser').show();
             },
             error: function (xhr) {
                 console.log(xhr);
@@ -26,3 +27,25 @@ $('#login').click(
         })
     }
 );
+
+function check() {
+    $.ajax({
+        type: 'POST',
+        url: '/user/getLoginId',
+        success: function (result) {
+            console.log(result);
+            if (result === null) {
+                $('#loginAndSign').show();
+                $('#welcomeUser').hide();
+            } else {
+                $('#loginAndSign').hide();
+                document.getElementById("user").innerText = result;
+                $('#welcomeUser').show();
+
+            }
+        },
+        error: function (xhr) {
+            console.log(xhr);
+        }
+    })
+}

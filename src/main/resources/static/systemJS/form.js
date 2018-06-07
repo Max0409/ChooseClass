@@ -1,5 +1,6 @@
 $().ready(function () {
     load();
+    check();
 });
 
 function load() {
@@ -45,7 +46,7 @@ function chooseClass(c_id, i) {
             c_id: c_id
         },
         success: function (result) {
-            $('#choose_' + i).innerText = "退课";
+            document.getElementById('#choose_' + i).innerText = "退课";
 
         },
         error: function (xhr, status, error) {
