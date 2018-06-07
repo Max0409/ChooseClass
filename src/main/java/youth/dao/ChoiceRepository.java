@@ -14,6 +14,8 @@ public interface ChoiceRepository extends JpaRepository<Choice, Integer> {
     @Transactional
     void deleteBySIdAndCId(String sid,String cid);
 
+    Choice findBySIdAndCId(String sid,String cid);
+
 
 
 

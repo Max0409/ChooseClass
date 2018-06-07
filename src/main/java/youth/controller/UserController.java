@@ -9,6 +9,7 @@ import youth.dao.ChoiceRepository;
 import youth.dao.StudentRepository;
 import youth.dao.SubjectRepository;
 import youth.model.Choice;
+import youth.model.Student;
 import youth.model.Subject;
 
 import javax.servlet.http.Cookie;
@@ -105,16 +106,13 @@ public class UserController {
     public boolean chooseSubject(String s_id, String c_id) {
 
        try{
-
-
            choiceRepository.save(new Choice(s_id,c_id));
-
-
            return true;
        }catch (Exception e){
            return  false;
        }
     }
+
 
 
 
@@ -139,6 +137,65 @@ public class UserController {
         }
     }
 
+    /*
+ 返回所有学生
+  */
+    @RequestMapping("/student")
+    public List<Student> getStudents() {
+        try{
+            return studentRepository.findAll();
+        }catch (Exception e){
+            return  null;
+        }
+    }
+
+
+    /*
+    返回所有选课信息
+     */
+
+    @RequestMapping("/choice")
+    public List<Choice> getChoices() {
+        try{
+            return choiceRepository.findAll();
+        }catch (Exception e){
+            return  null;
+        }
+    }
+
+
+    /*
+增加学生
+  */
+    @PostMapping(value = "/addStudent")
+    public boolean addStudent(String sId, String sName, String gender, String major, String password) {
+
+        try{
+            Student student=new Student(sId,sName,gender,major,password);
+            studentRepository.save(student);
+
+            return true;
+        }catch (Exception e){
+            return  false;
+        }
+    }
+
+    /*
+    判断学生是否选课
+     */
+
+    @PostMapping(value = "/isChoose", produces = "application/xml")
+    public boolean isChoose(String s_id, String c_id) {
+
+        try{
+            if (choiceRepository.findBySIdAndCId(s_id,c_id)!=null)
+            return true;
+            else
+                return false;
+        }catch (Exception e){
+            return  false;
+        }
+    }
 
 
 }
