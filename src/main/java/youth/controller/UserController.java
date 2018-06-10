@@ -59,7 +59,7 @@ public class UserController {
 /*
 登录
  */
-    @PostMapping("/login")
+    @RequestMapping("/login")
     public boolean login(HttpServletResponse response, String id, String password) {
 
         try {
@@ -102,7 +102,7 @@ public class UserController {
     /*
 选课
  */
-    @PostMapping(value = "/B_Subject", produces = "application/xml")
+    @RequestMapping(value = "/chooseSubject", produces = "application/xml")
     public boolean chooseSubject(String s_id, String c_id) {
 
        try{
@@ -120,7 +120,7 @@ public class UserController {
     /*
 退课
  */
-    @PostMapping("/deleteSubject")
+    @RequestMapping("/deleteSubject")
 
 
     public boolean deleteSubject(String s_id, String c_id) {
