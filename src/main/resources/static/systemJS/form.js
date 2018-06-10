@@ -9,28 +9,45 @@ function load() {
         type: 'POST',
         url: '/user/B_Subject',
         success: function (result) {
-            for (let i = 0; i < result.length; i++) {
-                let course = result[i];
-                $('#college').append(
-                    '<tr>' +
-                    '<td>' + course.id + '</td>' +
-                    '<td>' + course.name + '</td>' +
-                    '<td>' + course.teacher + '</td>' +
-                    '<td>' + course.time + '</td>' +
-                    '<td>' + course.location + '</td>' +
-                    '<td>' +
-                    '<button class="btn btn-link" id="choose_'+ i +'">选课</button>' +
-                    '<label id="chosen_' + i + '" style="display: none">已选择</label>' +
-                    '</td>' +
-                    '</tr>' +
-                    '<script>' +
-                    '$("#choose_' + i + '").click(function() {' +
-                        'chooseClass("' + course.id + '", ' + i + ')' +
-                    '});' +
-                    '</script>'
-                );
-            }
+            let resultList = parseXML(result).getElementsByTagName("课程");
 
+            for (let i = 0; i < resultList.length; i++) {
+                let c_id = resultList[i].getElementsByTagName("编号")[0].firstChild.nodeValue;
+                if (checkChoice(s_id, c_id) === "true") {
+                    $('#course_table').append(
+                        '<tr>' +
+                        '<td>' + resultList[i].getElementsByTagName("编号")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("名称")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("课时")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("学分")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("老师")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("地点")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' +
+                        '<label id="chosen_' + i + '">已选择</label>' +
+                        '</td>' +
+                        '</tr>'
+                    );
+                } else {
+                    $('#course_table').append(
+                        '<tr>' +
+                        '<td>' + resultList[i].getElementsByTagName("编号")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("名称")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("课时")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("学分")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("老师")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("地点")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' +
+                        '<button class="btn btn-link" id="choose_' + i + '">选课</button>' +
+                        '</td>' +
+                        '</tr>' +
+                        '<script>' +
+                        '$("#choose_' + i + '").click(function() {' +
+                        'chooseClass("' + resultList[i].getElementsByTagName("编号")[0].firstChild.nodeValue + '")' +
+                        '});' +
+                        '</script>'
+                    );
+                }
+            }
         },
         error: function (xhr, status, error) {
             console.log(xhr.status);
@@ -40,7 +57,7 @@ function load() {
 }
 
 //选课
-function chooseClass(c_id, i) {
+function chooseClass(c_id) {
     let s_id = $("#user").val();
     $.ajax({
         type: 'POST',
@@ -51,8 +68,7 @@ function chooseClass(c_id, i) {
         },
         success: function (result) {
             if (result) {
-                $('#chosen_' + i).show();
-                $('#choose_' + i).hide();
+                location.reload();
             } else {
               alert("已选择该课程，不要重复选课");
             }
