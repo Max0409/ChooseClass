@@ -189,7 +189,7 @@ public class UserController {
     public boolean chooseSubject(String s_id, String c_id) {
 
        try{
-           choiceRepository.save(new Choice(s_id,c_id));
+           choiceRepository.save(new Choice(s_id,c_id,"0","计算机科学"));
            return true;
        }catch (Exception e){
            return  false;
@@ -243,7 +243,7 @@ public class UserController {
     判断学生是否选课
      */
 
-    @PostMapping(value = "/isChoose", produces = "application/xml")
+    @PostMapping(value = "/isChoose")
     public boolean isChoose(String s_id, String c_id) {
 
         try{
