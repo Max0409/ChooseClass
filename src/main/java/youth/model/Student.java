@@ -22,10 +22,28 @@ public class Student {
     private String major;
     @Column(name = "PASSWORD")
     private String password;
+    @Column(name = "S_LEVEL")
+    private String sLevel;
+    @Column(name = "U_NAME")
+    private String uName;
+
+    public Student(String sId, String sName, String gender, String major, String password, String level, String userName) {
+        this.sId = sId;
+        this.sName = sName;
+        this.gender = gender;
+        this.major = major;
+        this.password = password;
+        this.sLevel = level;
+        this.uName = userName;
+
+
+    }
+
 
     public Student(){
 
     }
+
 
     public Student(String sId, String sName, String gender, String major, String password) {
         this.sId = sId;
@@ -74,5 +92,22 @@ public class Student {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getLevel() {
+        return sLevel;
+    }
+
+    public void setLevel(String level) {
+        this.sLevel = level;
+    }
+
+    public String getUserName() {
+        return uName;
+    }
+
+    public void setUserName(String userName) {
+        this.uName = userName;
+    }
+
 }
 

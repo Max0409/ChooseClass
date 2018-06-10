@@ -20,12 +20,41 @@ public class Choice {
     @Column(name = "C_ID")
     private String cId;
 
+    @Column(name = "SCORE")
+    private String score;
+
+    @Column(name = "SCHOOL")
+    private String school;
+
     public Choice(){
 
     }
     public Choice(String sId, String cId) {
         this.sId = sId;
         this.cId = cId;
+    }
+
+    public Choice(String sId, String cId, String score, String school) {
+        this.sId = sId;
+        this.cId = cId;
+        this.score = score;
+        this.school = school;
+    }
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
     }
 
     public String getsId() {

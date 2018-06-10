@@ -1,8 +1,10 @@
 package youth.controller;
 
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.QNameMap;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import youth.dao.ChoiceRepository;
@@ -15,6 +17,11 @@ import youth.model.Subject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.Element;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.StringWriter;
 import java.util.List;
 
 //访问：localhost:8080/user/hello，路径中不用加cloud
@@ -51,12 +58,88 @@ public class UserController {
 得到院系所有学科
  */
     @RequestMapping("/B_Subject")
-    public List<Subject> getAllBSubject() {
-        return  subjectRepository.findAll();
+    public String getAllBSubject() {
+
+
+
+        QNameMap qmaps = new QNameMap();
+        qmaps.setDefaultNamespace("nju.edu.cn/schema/b");
+        qmaps.setDefaultPrefix("b");
+
+        XStream xStream = new XStream(new StaxDriver(qmaps));
+        //调用toXML 将对象转成字符串
+        xStream.alias("课程列表", List.class);
+
+        xStream.alias("课程", youth.model.Subject.class);
+        xStream.aliasField("编号", Subject.class,"id");//为类的字段节点重命名
+        xStream.aliasField("名称", Subject.class,"name");//为类的字段节点重命名
+        xStream.aliasField("课时", Subject.class,"time");//为类的字段节点重命名
+        xStream.aliasField("学分", Subject.class,"score");//为类的字段节点重命名
+        xStream.aliasField("老师", Subject.class,"teacher");//为类的字段节点重命名
+        xStream.aliasField("地点", Subject.class,"location");//为类的字段节点重命名
+        xStream.aliasField("共享", Subject.class,"share");//为类的字段节点重命名
+        String s = xStream.toXML(subjectRepository.findAll());
+        return  s;
+
+    }
+    /*
+  返回所有学生
+   */
+    @RequestMapping("/student")
+    public String getStudents() {
+
+        QNameMap qmaps = new QNameMap();
+        qmaps.setDefaultNamespace("nju.edu.cn/schema/b");
+        qmaps.setDefaultPrefix("b");
+
+        XStream xStream = new XStream(new StaxDriver(qmaps));
+        //调用toXML 将对象转成字符串
+        xStream.alias("学生列表", List.class);
+
+        xStream.alias("学生信息", youth.model.Student.class);
+        xStream.aliasField("账户名", Student.class,"uName");//为类的字段节点重命名
+        xStream.aliasField("密码", Student.class,"password");//为类的字段节点重命名
+        xStream.aliasField("级别", Student.class,"sLevel");//为类的字段节点重命名
+        xStream.aliasField("学号", Student.class,"sId");//为类的字段节点重命名
+        xStream.aliasField("专业", Student.class,"major");//为类的字段节点重命名
+        xStream.aliasField("姓名", Student.class,"sName");//为类的字段节点重命名
+        xStream.aliasField("性别", Student.class,"gender");//为类的字段节点重命名
+
+        String s = xStream.toXML(studentRepository.findAll());
+        return  s;
+
+
     }
 
 
-/*
+
+    /*
+    返回所有选课信息
+     */
+
+    @RequestMapping("/choice")
+    public String getChoices() {
+        QNameMap qmaps = new QNameMap();
+        qmaps.setDefaultNamespace("nju.edu.cn/schema/b");
+        qmaps.setDefaultPrefix("b");
+
+        XStream xStream = new XStream(new StaxDriver(qmaps));
+        //调用toXML 将对象转成字符串
+        xStream.alias("选课列表", List.class);
+
+        xStream.alias("选课", youth.model.Choice.class);
+        xStream.aliasField("开课院系", Choice.class,"school");//为类的字段节点重命名
+        xStream.aliasField("学号", Choice.class,"sId");//为类的字段节点重命名
+        xStream.aliasField("编号", Choice.class,"cId");//为类的字段节点重命名
+        xStream.aliasField("得分", Choice.class,"score");//为类的字段节点重命名
+
+        String s = xStream.toXML(choiceRepository.findAll());
+        return  s;
+    }
+
+
+
+    /*
 登录
  */
     @RequestMapping("/login")
@@ -137,31 +220,7 @@ public class UserController {
         }
     }
 
-    /*
- 返回所有学生
-  */
-    @RequestMapping("/student")
-    public List<Student> getStudents() {
-        try{
-            return studentRepository.findAll();
-        }catch (Exception e){
-            return  null;
-        }
-    }
 
-
-    /*
-    返回所有选课信息
-     */
-
-    @RequestMapping("/choice")
-    public List<Choice> getChoices() {
-        try{
-            return choiceRepository.findAll();
-        }catch (Exception e){
-            return  null;
-        }
-    }
 
 
     /*
@@ -196,6 +255,7 @@ public class UserController {
             return  false;
         }
     }
+
 
 
 }
