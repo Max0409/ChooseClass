@@ -164,6 +164,14 @@ public class UserController {
 
     }
 
+    @RequestMapping("/getStuInfo")
+    public Student getStuInfo( String Sno) {
+
+        return  studentRepository.findBySId(Sno);
+
+
+    }
+
     //得到当前用户id
     @PostMapping("/getLoginId")
     public String getLoginId(HttpServletRequest request) {
