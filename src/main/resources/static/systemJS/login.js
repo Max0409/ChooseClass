@@ -1,8 +1,4 @@
 
-$().ready(function () {
-    check();
-});
-
 $('#login').click(
     function () {
         let s_id = $('#username').val();
@@ -33,10 +29,10 @@ function check() {
         type: 'POST',
         url: '/user/getLoginId',
         success: function (result) {
-            console.log(result);
             if (result === null) {
                 $('#loginAndSign').show();
                 $('#welcomeUser').hide();
+                alert("请先登录账号！")
             } else {
                 $('#loginAndSign').hide();
                 document.getElementById("user").innerText = result;
