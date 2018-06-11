@@ -7,6 +7,7 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
+import youth.bean.SubjectCount;
 import youth.dao.ChoiceRepository;
 import youth.dao.StudentRepository;
 import youth.dao.SubjectRepository;
@@ -22,6 +23,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 //访问：localhost:8080/user/hello，路径中不用加cloud
@@ -136,6 +138,41 @@ public class UserController {
         String s = xStream.toXML(choiceRepository.findAll());
         return  s;
     }
+    /*
+
+    返回所有选课统计信息
+     */
+
+    @RequestMapping("/getAllChooseDetail")
+    public String getAllChooseDetail() {
+
+        QNameMap qmaps = new QNameMap();
+        qmaps.setDefaultNamespace("nju.edu.cn/schema/b");
+        qmaps.setDefaultPrefix("b");
+
+        XStream xStream = new XStream(new StaxDriver(qmaps));
+
+
+        //调用toXML 将对象转成字符串
+//        xStream.alias("课程列表", List.class);
+//
+//
+//
+//        xStream.alias("课程", youth.model.Subject.class);
+//        xStream.aliasField("编号", Subject.class,"id");//为类的字段节点重命名
+//        xStream.aliasField("名称", Subject.class,"name");//为类的字段节点重命名
+//        xStream.aliasField("课时", Subject.class,"time");//为类的字段节点重命名
+//        xStream.aliasField("学分", Subject.class,"score");//为类的字段节点重命名
+//        xStream.aliasField("老师", Subject.class,"teacher");//为类的字段节点重命名
+//        xStream.aliasField("地点", Subject.class,"location");//为类的字段节点重命名
+//        xStream.aliasField("共享", Subject.class,"share");//为类的字段节点重命名
+
+        String s = xStream.toXML(getSubjectCount());
+        return  s;
+
+    }
+
+
 
 
 
@@ -264,6 +301,21 @@ public class UserController {
         }
     }
 
+
+    public List<SubjectCount> getSubjectCount(){
+
+        ArrayList arrayList=new ArrayList();
+        ArrayList<Subject> subjects= (ArrayList<Subject>) subjectRepository.findAll();
+        for(Subject subject:subjects){
+            SubjectCount subjectCount=new SubjectCount(choiceRepository,subject);
+            subjectCount.getCount();
+            arrayList.add(subjectCount);
+            System.out.println(subject.getName()+" "+subjectCount.count);
+
+        }
+
+        return arrayList;
+    }
 
 
 }
