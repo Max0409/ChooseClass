@@ -9,6 +9,8 @@ import youth.model.Subject;
 */
 public interface StudentRepository extends JpaRepository<Student, Integer> {
     Student findBySId(String id);
+    Student findBySIdAndPassword(String sid,String password);
+
 
 
 

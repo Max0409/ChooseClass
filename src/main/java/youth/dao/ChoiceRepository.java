@@ -16,6 +16,9 @@ public interface ChoiceRepository extends JpaRepository<Choice, Integer> {
 
     Choice findBySIdAndCId(String sid,String cid);
 
+    int countAllByCId(String cid);
+
+
 
 
 
