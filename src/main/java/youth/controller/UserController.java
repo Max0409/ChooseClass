@@ -15,6 +15,7 @@ import youth.dao.SubjectRepository;
 import youth.model.Choice;
 import youth.model.Student;
 import youth.model.Subject;
+import youth.util.CallInterface;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -40,13 +41,23 @@ public class UserController {
     private final ManagerRepository managerRepository;
 
 
-    public UserController(SubjectRepository subjectRepository, StudentRepository studentRepository, ChoiceRepository choiceRepository, ManagerRepository managerRepository) {
+
+
+
+
+    private final String basicUrl="http://172.19.184.117:8080";
+
+
+
+   public UserController(SubjectRepository subjectRepository, StudentRepository studentRepository, ChoiceRepository choiceRepository, ManagerRepository managerRepository) {
         this.subjectRepository = subjectRepository;
 
         this.studentRepository = studentRepository;
         this.choiceRepository = choiceRepository;
         this.managerRepository = managerRepository;
-    }
+
+
+   }
 
 
     @RequestMapping("/hello")
@@ -227,7 +238,7 @@ manager登录
     }
 
     /*
-管理员增加课程信息
+管理员删除课程信息
 */
     @RequestMapping("/managerDeleteSubject")
     public boolean managerDeleteSubject(String id) {
@@ -253,7 +264,7 @@ manager登录
 
 
     /*
-登录
+用户登录
  */
     @RequestMapping("/login")
     public boolean login(HttpServletResponse response, String id, String password) {
@@ -303,6 +314,37 @@ manager登录
     }
 
 
+
+    /*
+    新的选课
+     */
+
+    @RequestMapping(value = "/chooseCourse")
+    public String chooseCourse(String sId, String cId) {
+
+        return CallInterface.interfaceUtil(basicUrl + "/api/chooseCourse?sId=" + sId + "&cId=" + cId);
+    }
+
+    /*
+    新的退课
+     */
+
+    @RequestMapping(value = "/quitCourse")
+    public String quitCourse(String sId, String cId) {
+
+        return CallInterface.interfaceUtil(basicUrl + "/api/quitCourse?sId=" + sId + "&cId=" + cId);
+    }
+
+
+     /*
+    新的拿到学校全部的课程
+     */
+
+    @RequestMapping(value = "/getUserShareCourses")
+    public String getUserShareCourses(String sId) {
+
+        return CallInterface.interfaceUtil(basicUrl + "/api/getUserShareCourses?sId=" + sId );
+    }
 
 
 
