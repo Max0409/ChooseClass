@@ -70,7 +70,7 @@ public class UserController {
 得到院系所有学科
  */
     @RequestMapping("/B_Subject")
-    public String getAllBSubject() {
+    public String getAllBSubject(String s_id) {
 
 
 
@@ -90,7 +90,8 @@ public class UserController {
         xStream.aliasField("老师", Subject.class,"teacher");//为类的字段节点重命名
         xStream.aliasField("地点", Subject.class,"location");//为类的字段节点重命名
         xStream.aliasField("共享", Subject.class,"share");//为类的字段节点重命名
-        String s = xStream.toXML(subjectRepository.findAll());
+
+        String s = xStream.toXML(getIsChoosen(subjectRepository.findAll(),s_id));
         return  s;
 
     }
@@ -439,6 +440,20 @@ manager登录
         }
 
         return arrayList;
+    }
+
+
+    public List<Subject> getIsChoosen(List<Subject> subjects,String s_id){
+
+        for (Subject subject:subjects){
+            System.out.println(s_id+"  "+subject.getId());
+            if (choiceRepository.findBySIdAndCId(s_id,subject.getId())!=null){
+                subject.setChosen("true");
+            }
+        }
+
+        return subjects;
+
     }
 
 

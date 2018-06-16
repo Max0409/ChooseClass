@@ -37,6 +37,9 @@ public class Subject {
     private String share;
 
 
+    @Column(name = "CHOOSEN")
+    private String isChosen;
+
 
     public Subject(){
 
@@ -54,6 +57,13 @@ public class Subject {
 
     }
 
+    public String isChosen() {
+        return isChosen;
+    }
+
+    public void setChosen(String chosen) {
+        isChosen = chosen;
+    }
 
     public String getId() {
         return id;
