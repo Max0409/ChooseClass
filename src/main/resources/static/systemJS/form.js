@@ -1,6 +1,29 @@
 $().ready(function () {
+    // check();
+    $('#own').click();
+});
+
+
+$('#own').click(function () {
+    $('#own').addClass("active-menu");
+    $('#other').removeClass("active-menu");
+    $('#view').text("专业选课");
+    $('#share').hide();
     load();
-    check();
+});
+
+$('#other').click(function () {
+    $('#other').addClass("active-menu");
+    $('#own').removeClass("active-menu");
+    $('#view').text("跨院系选课");
+    $('#share').show();
+    $('#college').empty();
+});
+
+$('#check').click(function () {
+    let dep = $('input[name=dep]:checked').val();
+
+    // loadShareCourse(dep);
 });
 
 //加载所有课程信息
@@ -60,11 +83,19 @@ function load() {
 function chooseClass(c_id) {
     let s_id = $("#user").val();
     $.ajax({
+<<<<<<< HEAD
+<<<<<<< HEAD
+        type: 'POST',
+        url: '/user/chooseCourse',
+=======
+=======
+>>>>>>> 5f73e55d2e0aaaaf4b36baadb2346c07c0e8f6d2
         type: 'GET',
         url: '/user/B_Subject',
+>>>>>>> 5f73e55d2e0aaaaf4b36baadb2346c07c0e8f6d2
         data: {
-            s_id: s_id,
-            c_id: c_id
+            sId: s_id,
+            cId: c_id
         },
         success: function (result) {
             if (result) {
