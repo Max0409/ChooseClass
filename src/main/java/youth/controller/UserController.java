@@ -4,9 +4,15 @@ package youth.controller;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.QNameMap;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
+
 import youth.bean.SubjectCount;
 import youth.bean.SubjectVO;
 import youth.dao.ChoiceRepository;
@@ -23,6 +29,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //访问：localhost:8080/user/hello，路径中不用加cloud
 @Api(value = "用户模块", description = "用户相关接口")
@@ -91,6 +100,8 @@ public class UserController {
         xStream.aliasField("老师", Subject.class,"teacher");//为类的字段节点重命名
         xStream.aliasField("地点", Subject.class,"location");//为类的字段节点重命名
         xStream.aliasField("共享", Subject.class,"share");//为类的字段节点重命名
+        xStream.aliasField("IsChosen", Subject.class,"isChosen");//为类的字段节点重命名
+
 
         String s = xStream.toXML(getIsChoosen(subjectRepository.findAll(),s_id));
         return  s;
@@ -130,6 +141,7 @@ public class UserController {
         xStream.aliasField("老师", SubjectVO.class,"teacher");//为类的字段节点重命名
         xStream.aliasField("地点", SubjectVO.class,"location");//为类的字段节点重命名
         xStream.aliasField("共享", SubjectVO.class,"share");//为类的字段节点重命名
+        xStream.aliasField("IsChosen", SubjectVO.class,"isChosen");//为类的字段节点重命名
 
 
         String s = xStream.toXML(toSubjectVO(getIsChoosen(subjectRepository.findByShare("Y"),s_id)));
@@ -261,10 +273,12 @@ manager登录
 管理员增加课程信息
  */
     @RequestMapping("/managerAddSubject")
-    public boolean managerAddSubject(String id,String name,String time,String score,String teacher,String location,String share ) {
+    public boolean managerAddSubject(String name,String time,String score,String teacher,String location,String share ) {
 
         try {
 
+            String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase().substring(0,3);
+            String id="b"+uuid;
 
 
             Subject subject=new Subject( id, name, time, score,  teacher, location, share);
@@ -437,17 +451,46 @@ manager登录
     /*
 增加学生
   */
-    @PostMapping(value = "/addStudent")
-    public boolean addStudent(String sId, String sName, String gender, String major, String password) {
+    @RequestMapping(value = "/addStudent")
+    public boolean addStudent(String studentXML) {
 
-        try{
+        try {
+
+            Pattern p=Pattern.compile("<b:学生信息>\n" +
+                    "        <b:学号>(.*?)</b:学号>\n" +
+                    "        <b:姓名>(.*?)</b:姓名>\n" +
+                    "        <b:性别>(.*?)</b:性别>\n" +
+                    "        <b:专业>(.*?)</b:专业>\n" +
+                    "        <b:密码>(.*?)</b:密码>\n" +
+                    "        <b:级别>(.*?)</b:级别>\n" +
+                    "        <b:账户名>(.*?)</b:账户名>\n" +
+                    "    </b:学生信息>");
+            Matcher m=p.matcher(studentXML);
+            String sId=null;
+            String sName = null;
+            String gender = null;
+            String major = null;
+            String  password = null;
+            while(m.find()){
+                sId=m.group(1);
+                sName=m.group(2);
+                gender=m.group(3);
+                major=m.group(4);
+                password=m.group(5);
+            }
+
+
             Student student=new Student(sId,sName,gender,major,password);
             studentRepository.save(student);
 
             return true;
-        }catch (Exception e){
-            return  false;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return false;
         }
+
     }
 
 
