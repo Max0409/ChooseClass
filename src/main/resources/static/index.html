@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
     <title>学院B课程系统</title>
 	<!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
 	<link rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
@@ -13,8 +13,6 @@
     <!-- Custom Styles-->
     <link href="css/custom-styles.css" rel="stylesheet" />
     <!-- Google Fonts-->
-    <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />-->
-    <link rel="stylesheet" href="js/Lightweight-Chart/cssCharts.css">
 </head>
 
 <body>
@@ -37,9 +35,14 @@
                         <!--<i class="fa fa-bell fa-fw"></i><i class="material-icons right">arrow_drop_down</i>-->
                     <!--</a>-->
                 <!--</li>-->
-                <li id="loginAndSign">
+                <li id="stuLogin">
                     <a class="waves-effect waves-dark" data-target="#loginWindow" data-toggle="modal">
-                        <i class="fa fa-user fa-fw"></i><b>登录 ／ 注册</b>
+                        <i class="fa fa-user fa-fw"></i><b>学生登录入口</b>
+                    </a>
+                </li>
+                <li id="manLogin">
+                    <a class="waves-effect waves-dark" data-target="#managerLoginWindow" data-toggle="modal">
+                        <i class="fa fa-user fa-fw"></i><b>管理员登录入口</b>
                     </a>
                 </li>
 				<li id="welcomeUser" style="display: none">
@@ -53,7 +56,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <span>登录</span>
+                        <span>学生用户登录</span>
                     </div>
                     <div class="modal-body">
                         <div>
@@ -69,36 +72,30 @@
                 </div>
             </div>
         </div>
-		<!-- Dropdown Structure -->
-			<ul id="dropdown1" class="dropdown-content">
-				<li><a id="person_info_btn"><i class="fa fa-user fa-fw"></i> 个人信息</a>
-				</li>
-				<!--<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>-->
-				<!--</li>-->
-				<!--<li><a href="#"><i class="fa fa-sign-out fa-fw"></i>Logout</a>-->
-				<!--</li>-->
-			</ul>
-        <ul id="dropdown2" class="dropdown-content dropdown-tasks w250 taskList">
-			<li>
-                <a href="#">
-					<div>
-						<strong>通知名称</strong>
-						<span class="pull-right text-muted">
-							<em>时间</em>
-						</span>
-					</div>
-					<p>通知详情</p>
-				</a>
-			</li>
-			<li class="divider"></li>
-			<li>
-				<a class="text-center" href="#">
-					<strong>更多通知</strong>
-					<i class="fa fa-angle-right"></i>
-				</a>
-			</li>
-		</ul>
-	   <!--/. NAV TOP  -->
+        <div class="modal fade" id="managerLoginWindow" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>管理员登录</span>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <input id="managerName" class="input" type="text" placeholder="用户名"/>
+                            <br>
+                            <input id="managePass" class="input" type="password" placeholder="密码"/>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="managerLogin" class="btn login" data-dismiss="modal">登录</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
         <nav class="navbar-default navbar-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav" id="main-menu">

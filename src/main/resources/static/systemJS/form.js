@@ -1,48 +1,71 @@
 $().ready(function () {
+    // check();
+    $('#own').click();
+});
+
+
+$('#own').click(function () {
+    $('#own').addClass("active-menu");
+    $('#other').removeClass("active-menu");
+    $('#view').text("专业选课");
+    $('#share').hide();
     load();
-    check();
+});
+
+$('#other').click(function () {
+    $('#other').addClass("active-menu");
+    $('#own').removeClass("active-menu");
+    $('#view').text("跨院系选课");
+    $('#share').show();
+    $('#college').empty();
+});
+
+$('#check').click(function () {
+    let dep = $('input[name=dep]:checked').val();
+
+    // loadShareCourse(dep);
 });
 
 //加载所有课程信息
 function load() {
     $.ajax({
-        type: 'POST',
+        type: 'GET',
         url: '/user/B_Subject',
         success: function (result) {
-            let resultList = parseXML(result).getElementsByTagName("课程");
-
+            let s_id = $("#user").val();
+            let resultList = parseXML(result).getElementsByTagName("b:课程");
             for (let i = 0; i < resultList.length; i++) {
-                let c_id = resultList[i].getElementsByTagName("编号")[0].firstChild.nodeValue;
-                if (checkChoice(s_id, c_id) === "true") {
-                    $('#course_table').append(
+                let c_id = resultList[i].getElementsByTagName("b:编号")[0].firstChild.nodeValue;
+                if (checkChoice(s_id, c_id)) {
+                    $('#college').append(
                         '<tr>' +
-                        '<td>' + resultList[i].getElementsByTagName("编号")[0].firstChild.nodeValue + '</td>' +
-                        '<td>' + resultList[i].getElementsByTagName("名称")[0].firstChild.nodeValue + '</td>' +
-                        '<td>' + resultList[i].getElementsByTagName("课时")[0].firstChild.nodeValue + '</td>' +
-                        '<td>' + resultList[i].getElementsByTagName("学分")[0].firstChild.nodeValue + '</td>' +
-                        '<td>' + resultList[i].getElementsByTagName("老师")[0].firstChild.nodeValue + '</td>' +
-                        '<td>' + resultList[i].getElementsByTagName("地点")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("b:编号")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("b:名称")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("b:课时")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("b:学分")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("b:老师")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("b:地点")[0].firstChild.nodeValue + '</td>' +
                         '<td>' +
                         '<label id="chosen_' + i + '">已选择</label>' +
                         '</td>' +
                         '</tr>'
                     );
                 } else {
-                    $('#course_table').append(
+                    $('#college').append(
                         '<tr>' +
-                        '<td>' + resultList[i].getElementsByTagName("编号")[0].firstChild.nodeValue + '</td>' +
-                        '<td>' + resultList[i].getElementsByTagName("名称")[0].firstChild.nodeValue + '</td>' +
-                        '<td>' + resultList[i].getElementsByTagName("课时")[0].firstChild.nodeValue + '</td>' +
-                        '<td>' + resultList[i].getElementsByTagName("学分")[0].firstChild.nodeValue + '</td>' +
-                        '<td>' + resultList[i].getElementsByTagName("老师")[0].firstChild.nodeValue + '</td>' +
-                        '<td>' + resultList[i].getElementsByTagName("地点")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("b:编号")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("b:名称")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("b:课时")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("b:学分")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("b:老师")[0].firstChild.nodeValue + '</td>' +
+                        '<td>' + resultList[i].getElementsByTagName("b:地点")[0].firstChild.nodeValue + '</td>' +
                         '<td>' +
                         '<button class="btn btn-link" id="choose_' + i + '">选课</button>' +
                         '</td>' +
                         '</tr>' +
                         '<script>' +
                         '$("#choose_' + i + '").click(function() {' +
-                        'chooseClass("' + resultList[i].getElementsByTagName("编号")[0].firstChild.nodeValue + '")' +
+                        'chooseClass("' + resultList[i].getElementsByTagName("b:编号")[0].firstChild.nodeValue + '")' +
                         '});' +
                         '</script>'
                     );
@@ -60,11 +83,16 @@ function load() {
 function chooseClass(c_id) {
     let s_id = $("#user").val();
     $.ajax({
+<<<<<<< HEAD
         type: 'POST',
+        url: '/user/chooseCourse',
+=======
+        type: 'GET',
         url: '/user/B_Subject',
+>>>>>>> 5f73e55d2e0aaaaf4b36baadb2346c07c0e8f6d2
         data: {
-            s_id: s_id,
-            c_id: c_id
+            sId: s_id,
+            cId: c_id
         },
         success: function (result) {
             if (result) {

@@ -14,3 +14,25 @@ function parseXML(xmlFile){
     }
     return xmlDoc;
 }
+
+function checkChoice(s_id, c_id) {
+    let isChoice = false;
+    $.ajax({
+        type: 'POST',
+        url: '/user/isChoose',
+        data: {
+            s_id: s_id,
+            c_id: c_id,
+        },
+        async: false,
+        success: function (result) {
+            console.log(result)
+            isChoice = result;
+        },
+        error: function (xhr) {
+            console.log(xhr);
+        }
+    });
+
+    return isChoice;
+}
