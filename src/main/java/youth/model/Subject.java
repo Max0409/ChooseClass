@@ -120,5 +120,13 @@ public class Subject {
     public void setShare(String share) {
         this.share = share;
     }
+
+    public String getIsChosen() {
+        return isChosen;
+    }
+
+    public void setIsChosen(String isChosen) {
+        this.isChosen = isChosen;
+    }
 }
 

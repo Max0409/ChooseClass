@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import youth.bean.SubjectCount;
+import youth.bean.SubjectVO;
 import youth.dao.ChoiceRepository;
 import youth.dao.ManagerRepository;
 import youth.dao.StudentRepository;
@@ -92,6 +93,46 @@ public class UserController {
         xStream.aliasField("共享", Subject.class,"share");//为类的字段节点重命名
 
         String s = xStream.toXML(getIsChoosen(subjectRepository.findAll(),s_id));
+        return  s;
+
+    }
+
+
+    /*
+得到院系所有共享学科
+ */
+    @RequestMapping("/B_ShareSubject")
+    public String getShareBSubject(String s_id) {
+
+
+
+        QNameMap qmaps = new QNameMap();
+        qmaps.setDefaultNamespace("nju.edu.cn/schema/b");
+        qmaps.setDefaultPrefix("b");
+
+        XStream xStream = new XStream(new StaxDriver(qmaps));
+        //调用toXML 将对象转成字符串
+        xStream.alias("课程列表", List.class);
+
+        xStream.alias("课程", youth.model.Subject.class);
+        xStream.aliasField("编号", Subject.class,"id");//为类的字段节点重命名
+        xStream.aliasField("名称", Subject.class,"name");//为类的字段节点重命名
+        xStream.aliasField("课时", Subject.class,"time");//为类的字段节点重命名
+        xStream.aliasField("学分", Subject.class,"score");//为类的字段节点重命名
+        xStream.aliasField("老师", Subject.class,"teacher");//为类的字段节点重命名
+        xStream.aliasField("地点", Subject.class,"location");//为类的字段节点重命名
+        xStream.aliasField("共享", Subject.class,"share");//为类的字段节点重命名
+        xStream.alias("课程", youth.bean.SubjectVO.class);
+        xStream.aliasField("编号", SubjectVO.class,"id");//为类的字段节点重命名
+        xStream.aliasField("名称", SubjectVO.class,"name");//为类的字段节点重命名
+        xStream.aliasField("课时", SubjectVO.class,"time");//为类的字段节点重命名
+        xStream.aliasField("学分", SubjectVO.class,"score");//为类的字段节点重命名
+        xStream.aliasField("老师", SubjectVO.class,"teacher");//为类的字段节点重命名
+        xStream.aliasField("地点", SubjectVO.class,"location");//为类的字段节点重命名
+        xStream.aliasField("共享", SubjectVO.class,"share");//为类的字段节点重命名
+
+
+        String s = xStream.toXML(toSubjectVO(getIsChoosen(subjectRepository.findByShare("Y"),s_id)));
         return  s;
 
     }
@@ -187,6 +228,7 @@ public class UserController {
         return  s;
 
     }
+
 
     /*
 manager登录
@@ -342,9 +384,9 @@ manager登录
      */
 
     @RequestMapping(value = "/getUserShareCourses")
-    public String getUserShareCourses(String sId) {
+    public String getUserShareCourses(String sId,String dep) {
 
-        return CallInterface.interfaceUtil(basicUrl + "/api/getUserShareCourses?sId=" + sId );
+        return CallInterface.interfaceUtil(basicUrl + "/api/getUserShareCourses?sId=" + sId+"&system=b&dep="+dep );
     }
 
 
@@ -456,5 +498,19 @@ manager登录
 
     }
 
+
+
+    public List<SubjectVO> toSubjectVO(List<Subject>  subjects){
+        List<SubjectVO> subjectVOS=new ArrayList<SubjectVO>();
+        for(Subject subject:subjects){
+            SubjectVO subjectVO=new SubjectVO();
+            subjectVO.toSubjectVO(subject);
+
+            subjectVOS.add(subjectVO);
+
+        }
+
+        return subjectVOS;
+    }
 
 }
