@@ -9,20 +9,17 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import youth.bean.SubjectCount;
 import youth.dao.ChoiceRepository;
+import youth.dao.ManagerRepository;
 import youth.dao.StudentRepository;
 import youth.dao.SubjectRepository;
 import youth.model.Choice;
 import youth.model.Student;
 import youth.model.Subject;
+import youth.util.CallInterface;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.Element;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,14 +37,27 @@ public class UserController {
     private final StudentRepository studentRepository;
     @Autowired
     private final ChoiceRepository choiceRepository;
+    @Autowired
+    private final ManagerRepository managerRepository;
 
 
-    public UserController(SubjectRepository subjectRepository, StudentRepository studentRepository, ChoiceRepository choiceRepository) {
+
+
+
+
+    private final String basicUrl="http://172.19.184.117:8080";
+
+
+
+   public UserController(SubjectRepository subjectRepository, StudentRepository studentRepository, ChoiceRepository choiceRepository, ManagerRepository managerRepository) {
         this.subjectRepository = subjectRepository;
 
         this.studentRepository = studentRepository;
         this.choiceRepository = choiceRepository;
-    }
+        this.managerRepository = managerRepository;
+
+
+   }
 
 
     @RequestMapping("/hello")
@@ -60,7 +70,7 @@ public class UserController {
 得到院系所有学科
  */
     @RequestMapping("/B_Subject")
-    public String getAllBSubject() {
+    public String getAllBSubject(String s_id) {
 
 
 
@@ -80,7 +90,8 @@ public class UserController {
         xStream.aliasField("老师", Subject.class,"teacher");//为类的字段节点重命名
         xStream.aliasField("地点", Subject.class,"location");//为类的字段节点重命名
         xStream.aliasField("共享", Subject.class,"share");//为类的字段节点重命名
-        String s = xStream.toXML(subjectRepository.findAll());
+
+        String s = xStream.toXML(getIsChoosen(subjectRepository.findAll(),s_id));
         return  s;
 
     }
@@ -154,30 +165,107 @@ public class UserController {
 
 
         //调用toXML 将对象转成字符串
-//        xStream.alias("课程列表", List.class);
-//
-//
-//
-//        xStream.alias("课程", youth.model.Subject.class);
-//        xStream.aliasField("编号", Subject.class,"id");//为类的字段节点重命名
-//        xStream.aliasField("名称", Subject.class,"name");//为类的字段节点重命名
-//        xStream.aliasField("课时", Subject.class,"time");//为类的字段节点重命名
-//        xStream.aliasField("学分", Subject.class,"score");//为类的字段节点重命名
-//        xStream.aliasField("老师", Subject.class,"teacher");//为类的字段节点重命名
-//        xStream.aliasField("地点", Subject.class,"location");//为类的字段节点重命名
-//        xStream.aliasField("共享", Subject.class,"share");//为类的字段节点重命名
+        xStream.alias("课程列表", List.class);
 
-        String s = xStream.toXML(getSubjectCount());
+
+
+        xStream.alias("课程", youth.model.Subject.class);
+        xStream.aliasField("编号", Subject.class,"id");//为类的字段节点重命名
+        xStream.aliasField("名称", Subject.class,"name");//为类的字段节点重命名
+        xStream.aliasField("课时", Subject.class,"time");//为类的字段节点重命名
+        xStream.aliasField("学分", Subject.class,"score");//为类的字段节点重命名
+        xStream.aliasField("老师", Subject.class,"teacher");//为类的字段节点重命名
+        xStream.aliasField("地点", Subject.class,"location");//为类的字段节点重命名
+        xStream.aliasField("共享", Subject.class,"share");//为类的字段节点重命名
+
+
+
+
+        List<SubjectCount> subjectCounts=getSubjectCount();
+
+        String s = xStream.toXML(subjectCounts);
         return  s;
+
+    }
+
+    /*
+manager登录
+ */
+    @RequestMapping("/manager_login")
+    public boolean ManagerLogin(HttpServletResponse response, String name, String password) {
+
+        try {
+            if (managerRepository.findByName(name).getPassword().equals(password)){
+                Cookie userCookie=new Cookie("managerName",name);
+
+
+                userCookie.setMaxAge(30*24*60*60);   //存活期为一个月 30*24*60*60
+                userCookie.setPath("/");
+                response.addCookie(userCookie);
+                return true;
+            }else {
+                return false;
+            }
+
+        }catch (Exception e){
+            return false;
+        }
 
     }
 
 
 
+    /*
+管理员增加课程信息
+ */
+    @RequestMapping("/managerAddSubject")
+    public boolean managerAddSubject(String id,String name,String time,String score,String teacher,String location,String share ) {
+
+        try {
+
+
+
+            Subject subject=new Subject( id, name, time, score,  teacher, location, share);
+            subjectRepository.save(subject);
+
+
+            return true;
+
+        }catch (Exception e){
+            return false;
+        }
+
+
+    }
+
+    /*
+管理员删除课程信息
+*/
+    @RequestMapping("/managerDeleteSubject")
+    public boolean managerDeleteSubject(String id) {
+
+        try {
+
+
+
+
+            subjectRepository.deleteById(id);
+
+
+
+            return true;
+
+        }catch (Exception e){
+            return false;
+        }
+
+
+    }
+
 
 
     /*
-登录
+用户登录
  */
     @RequestMapping("/login")
     public boolean login(HttpServletResponse response, String id, String password) {
@@ -227,13 +315,49 @@ public class UserController {
     }
 
 
+
+    /*
+    新的选课
+     */
+
+    @RequestMapping(value = "/chooseCourse")
+    public String chooseCourse(String sId, String cId) {
+
+        return CallInterface.interfaceUtil(basicUrl + "/api/chooseCourse?sId=" + sId + "&cId=" + cId);
+    }
+
+    /*
+    新的退课
+     */
+
+    @RequestMapping(value = "/quitCourse")
+    public String quitCourse(String sId, String cId) {
+
+        return CallInterface.interfaceUtil(basicUrl + "/api/quitCourse?sId=" + sId + "&cId=" + cId);
+    }
+
+
+     /*
+    新的拿到学校全部的课程
+     */
+
+    @RequestMapping(value = "/getUserShareCourses")
+    public String getUserShareCourses(String sId) {
+
+        return CallInterface.interfaceUtil(basicUrl + "/api/getUserShareCourses?sId=" + sId );
+    }
+
+
+
     /*
 选课
  */
-    @RequestMapping(value = "/chooseSubject", produces = "application/xml")
+    @RequestMapping(value = "/chooseSubject")
     public boolean chooseSubject(String s_id, String c_id) {
 
        try{
+
+
            choiceRepository.save(new Choice(s_id,c_id,"0","计算机科学"));
            return true;
        }catch (Exception e){
@@ -284,6 +408,7 @@ public class UserController {
         }
     }
 
+
     /*
     判断学生是否选课
      */
@@ -315,6 +440,20 @@ public class UserController {
         }
 
         return arrayList;
+    }
+
+
+    public List<Subject> getIsChoosen(List<Subject> subjects,String s_id){
+
+        for (Subject subject:subjects){
+            System.out.println(s_id+"  "+subject.getId());
+            if (choiceRepository.findBySIdAndCId(s_id,subject.getId())!=null){
+                subject.setChosen("true");
+            }
+        }
+
+        return subjects;
+
     }
 
 

@@ -84,9 +84,12 @@ function chooseClass(c_id) {
     let s_id = $("#user").val();
     $.ajax({
 <<<<<<< HEAD
+<<<<<<< HEAD
         type: 'POST',
         url: '/user/chooseCourse',
 =======
+=======
+>>>>>>> 5f73e55d2e0aaaaf4b36baadb2346c07c0e8f6d2
         type: 'GET',
         url: '/user/B_Subject',
 >>>>>>> 5f73e55d2e0aaaaf4b36baadb2346c07c0e8f6d2
