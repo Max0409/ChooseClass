@@ -1,4 +1,4 @@
-package youth.controller;
+package youth.util;
 
 
 import com.thoughtworks.xstream.XStream;
@@ -35,10 +35,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 //访问：localhost:8080/user/hello，路径中不用加cloud
-@Api(value = "用户模块", description = "用户相关接口")
-@RestController
-@RequestMapping("/user")
-public class UserController {
+
+public class ServiceTool {
 
 
 
@@ -60,7 +58,8 @@ public class UserController {
 
 
 
-   public UserController(SubjectRepository subjectRepository, StudentRepository studentRepository, ChoiceRepository choiceRepository, ManagerRepository managerRepository) {
+
+    public ServiceTool(SubjectRepository subjectRepository, StudentRepository studentRepository, ChoiceRepository choiceRepository, ManagerRepository managerRepository) {
         this.subjectRepository = subjectRepository;
 
         this.studentRepository = studentRepository;
@@ -68,19 +67,19 @@ public class UserController {
         this.managerRepository = managerRepository;
 
 
-   }
+    }
 
 
-    @RequestMapping("/hello")
+
     public String say() {
 
         return "Helloxixiix";
     }
 
-/*
-得到院系所有学科
- */
-    @RequestMapping("/B_Subject")
+    /*
+    得到院系所有学科
+     */
+
     public String getAllBSubject(String s_id) {
 
 
@@ -113,7 +112,7 @@ public class UserController {
     /*
 得到院系所有共享学科
  */
-    @RequestMapping("/B_ShareSubject")
+
     public String getShareBSubject(String s_id) {
 
 
@@ -152,7 +151,7 @@ public class UserController {
     /*
   返回所有学生
    */
-    @RequestMapping("/student")
+
     public String getStudents() {
 
         QNameMap qmaps = new QNameMap();
@@ -184,7 +183,7 @@ public class UserController {
     返回所有选课信息
      */
 
-    @RequestMapping("/choice")
+
     public String getChoices() {
         QNameMap qmaps = new QNameMap();
         qmaps.setDefaultNamespace("nju.edu.cn/schema/b");
@@ -208,7 +207,7 @@ public class UserController {
     返回所有选课统计信息
      */
 
-    @RequestMapping("/getAllChooseDetail")
+
     public String getAllChooseDetail() {
 
         QNameMap qmaps = new QNameMap();
@@ -246,7 +245,7 @@ public class UserController {
     /*
 manager登录
  */
-    @RequestMapping("/manager_login")
+
     public boolean ManagerLogin(HttpServletResponse response, String name, String password) {
 
         try {
@@ -273,7 +272,7 @@ manager登录
     /*
 管理员增加课程信息
  */
-    @RequestMapping("/managerAddSubject")
+
     public boolean managerAddSubject(String name,String time,String score,String teacher,String location,String share ) {
 
         try {
@@ -298,7 +297,7 @@ manager登录
     /*
 管理员删除课程信息
 */
-    @RequestMapping("/managerDeleteSubject")
+
     public boolean managerDeleteSubject(String id) {
 
         try {
@@ -324,7 +323,7 @@ manager登录
     /*
 用户登录
  */
-    @RequestMapping("/login")
+
     public boolean login(HttpServletResponse response, String id, String password) {
 
         try {
@@ -346,7 +345,7 @@ manager登录
 
     }
 
-    @RequestMapping("/getStuInfo")
+
     public Student getStuInfo( String Sno) {
 
         return  studentRepository.findBySId(Sno);
@@ -355,7 +354,7 @@ manager登录
     }
 
     //得到当前用户id
-    @PostMapping("/getLoginId")
+
     public String getLoginId(HttpServletRequest request) {
 
         Cookie[] cookies = request.getCookies();//这样便可以获取一个cookie数组
@@ -377,7 +376,7 @@ manager登录
     新的选课
      */
 
-    @RequestMapping(value = "/chooseCourse")
+
     public String chooseCourse(String sId, String cId) {
 
         return CallInterface.interfaceUtil(basicUrl + "/api/chooseCourse?sId=" + sId + "&cId=" + cId);
@@ -387,7 +386,7 @@ manager登录
     新的退课
      */
 
-    @RequestMapping(value = "/quitCourse")
+
     public String quitCourse(String sId, String cId) {
 
         return CallInterface.interfaceUtil(basicUrl + "/api/quitCourse?sId=" + sId + "&cId=" + cId);
@@ -398,7 +397,7 @@ manager登录
     新的拿到学校全部的课程
      */
 
-    @RequestMapping(value = "/getUserShareCourses")
+
     public String getUserShareCourses(String sId,String dep) {
 
         return CallInterface.interfaceUtil(basicUrl + "/api/getUserShareCourses?sId=" + sId+"&system=b&dep="+dep );
@@ -409,17 +408,17 @@ manager登录
     /*
 选课
  */
-    @RequestMapping(value = "/chooseSubject")
+
     public boolean chooseSubject(String s_id, String c_id) {
 
-       try{
+        try{
 
 
-           choiceRepository.save(new Choice(s_id,c_id,"0","计算机科学"));
-           return true;
-       }catch (Exception e){
-           return  false;
-       }
+            choiceRepository.save(new Choice(s_id,c_id,"0","计算机科学"));
+            return true;
+        }catch (Exception e){
+            return  false;
+        }
     }
 
 
@@ -429,7 +428,7 @@ manager登录
     /*
 退课
  */
-    @RequestMapping("/deleteSubject")
+
 
 
     public boolean deleteSubject(String s_id, String c_id) {
@@ -452,7 +451,7 @@ manager登录
     /*
 增加学生
   */
-    @PostMapping(value = "/addStudent")
+
     public boolean addStudent(HttpServletResponse response,HttpServletRequest request) {
 
         try {
@@ -472,36 +471,12 @@ manager登录
             Element root = doc.getRootElement();
             for (Iterator i = root.elementIterator(); i.hasNext(); ) {
                 Element element = (Element) i.next();
-                Student student=new Student();
                 System.out.println(element.element("账户名").getText());
-                student.setUserName(element.element("账户名").getText());
-
-                System.out.println(element.element("密码").getText());
-                student.setPassword(element.element("密码").getText());
-
-                System.out.println(element.element("专业").getText());
-                student.setMajor(element.element("专业").getText());
-
-                System.out.println(element.element("性别").getText());
-                student.setGender(element.element("性别").getText());
-
-                System.out.println(element.element("姓名").getText());
-                student.setsName(element.element("姓名").getText());
-
-                System.out.println(element.element("学号").getText());
-                student.setsId(element.element("学号").getText());
-
-                System.out.println(element.element("级别").getText());
-                student.setLevel(element.element("级别").getText());
-
-
-                studentRepository.save(student);
-
             }
 
 
 
-         return true;
+            return true;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -516,12 +491,12 @@ manager登录
     判断学生是否选课
      */
 
-    @PostMapping(value = "/isChoose")
+
     public boolean isChoose(String s_id, String c_id) {
 
         try{
             if (choiceRepository.findBySIdAndCId(s_id,c_id)!=null)
-            return true;
+                return true;
             else
                 return false;
         }catch (Exception e){
