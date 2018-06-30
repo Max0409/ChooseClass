@@ -1,4 +1,5 @@
 
+//user login
 $('#login').click(
     function () {
         let s_id = $('#username').val();
@@ -12,9 +13,11 @@ $('#login').click(
                 password: password
             },
             success: function (result) {
-                $('#loginAndSign').hide();
+                $('#stuLogin').hide();
+                $('#managerLogin').hide();
                 document.getElementById("user").innerText = s_id;
                 $('#welcomeUser').show();
+                localStorage.setItem('user', s_id);
             },
             error: function (xhr) {
                 console.log(xhr);
@@ -24,24 +27,37 @@ $('#login').click(
     }
 );
 
-function check() {
-    $.ajax({
-        type: 'POST',
-        url: '/user/getLoginId',
-        success: function (result) {
-            if (result === null) {
-                $('#loginAndSign').show();
-                $('#welcomeUser').hide();
-                alert("请先登录账号！")
-            } else {
-                $('#loginAndSign').hide();
-                document.getElementById("user").innerText = result;
-                $('#welcomeUser').show();
 
+//manager login
+$('#managerLogin').click(
+    function () {
+        let managerName = $('#managerName').val();
+        let managerPass = $('#managerPass').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/user/manager_login',
+            data: {
+                id: managerName,
+                password: managerPass
+            },
+            success: function (result) {
+                localStorage.setItem('user', managerName);
+                window.location.href = "manager.html";
+            },
+            error: function (xhr) {
+                console.log(xhr);
             }
-        },
-        error: function (xhr) {
-            console.log(xhr);
-        }
-    })
+
+        })
+    }
+);
+
+
+function check() {
+    if (localStorage.getItem('user') === null) {
+        window.location.href = 'index.html';
+    } else {
+        document.getElementById('user').innerText = localStorage.getItem('user');
+    }
 }

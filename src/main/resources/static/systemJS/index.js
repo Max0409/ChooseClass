@@ -1,17 +1,22 @@
 $().ready(function () {
-    check();
+    if (localStorage.getItem('user') === null) {
+        alert("请登录后再使用教务系统");
+        $('#stuLogin').show();
+        $('#manLogin').show();
+        $('#welcomeUser').hide();
+
+    } else {
+        $('#stuLogin').hide();
+        $('#manLogin').hide();
+        $('#welcomeUser').show();
+
+        document.getElementById('user').innerText = localStorage.getItem('user');
+    }
+
+
     loadPersonalClass();
 });
 
-
-$('#person_info_btn').click(function () {
-
-    document.getElementById("view").innerText = "我的信息";
-
-    $('#person_info').show();
-    $('#course_table').hide();
-
-});
 
 //加载个人课程
 function loadPersonalClass() {
@@ -62,10 +67,10 @@ function deleteSubject(c_id) {
     let s_id = $("#user").val();
     $.ajax({
         type: 'POST',
-        url: '/user/deleteSubject',
+        url: '/user/quitCourse',
         data: {
-            s_id: s_id,
-            c_id: c_id
+            sId: s_id,
+            cId: c_id
         },
         success: function (result) {
             if (result) {

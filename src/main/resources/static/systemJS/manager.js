@@ -67,11 +67,11 @@ function loadAllCourse() {
         data: {},
         dataType: 'text',
         success: function (result) {
-            let resultList = parseXML(result).getElementsByTagName("c:课程");
+            let resultList = parseXML(result).getElementsByTagName("b:课程");
             for (let i = 0; i < resultList.length; i++) {
                 let share = "";
                 let color = "lightskyblue";
-                if (resultList[i].getElementsByTagName("c:Share")[0].firstChild.nodeValue === "Y") {
+                if (resultList[i].getElementsByTagName("b:Share")[0].firstChild.nodeValue === "Y") {
                     share = "已共享";
                 } else {
                     share = "未共享";
@@ -79,12 +79,12 @@ function loadAllCourse() {
                 }
                 $('#course_table').append(
                     '<tr>' +
-                    '<td>' + resultList[i].getElementsByTagName("c:Cno")[0].firstChild.nodeValue + '</td>' +
-                    '<td>' + resultList[i].getElementsByTagName("c:Cnm")[0].firstChild.nodeValue + '</td>' +
-                    '<td>' + resultList[i].getElementsByTagName("c:Ctm")[0].firstChild.nodeValue + '</td>' +
-                    '<td>' + resultList[i].getElementsByTagName("c:Cpt")[0].firstChild.nodeValue + '</td>' +
-                    '<td>' + resultList[i].getElementsByTagName("c:Tec")[0].firstChild.nodeValue + '</td>' +
-                    '<td>' + resultList[i].getElementsByTagName("c:Pla")[0].firstChild.nodeValue + '</td>' +
+                    '<td>' + resultList[i].getElementsByTagName("b:编号")[0].firstChild.nodeValue + '</td>' +
+                    '<td>' + resultList[i].getElementsByTagName("b:名称")[0].firstChild.nodeValue + '</td>' +
+                    '<td>' + resultList[i].getElementsByTagName("b:课时")[0].firstChild.nodeValue + '</td>' +
+                    '<td>' + resultList[i].getElementsByTagName("b:学分")[0].firstChild.nodeValue + '</td>' +
+                    '<td>' + resultList[i].getElementsByTagName("b:老师")[0].firstChild.nodeValue + '</td>' +
+                    '<td>' + resultList[i].getElementsByTagName("b:地点")[0].firstChild.nodeValue + '</td>' +
                     '<td><label style="color: '+ color +'">'+ share +'</label></td>' +
                     '<td>' +
                     '<button class="btn btn-link" id="delete_' + i + '">删除</button>' +
@@ -92,7 +92,7 @@ function loadAllCourse() {
                     '</tr>' +
                     '<script>' +
                     '$("#delete_' + i + '").click(function() {' +
-                    'deleteCourse("' + resultList[i].getElementsByTagName("c:Cno")[0].firstChild.nodeValue + '")' +
+                    'deleteCourse("' + resultList[i].getElementsByTagName("b:编号")[0].firstChild.nodeValue + '")' +
                     '});' +
                     '</script>'
                 );
@@ -111,9 +111,9 @@ function loadAllCourse() {
 function deleteCourse(cno) {
     $.ajax({
         type: 'GET',
-        url: '/deleteCourse',
+        url: '/user/managerDeleteSubject',
         data: {
-            cno: cno
+            id: cno
         },
         success: function (result) {
             if (result) {
