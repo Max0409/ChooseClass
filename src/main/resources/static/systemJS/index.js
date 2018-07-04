@@ -20,12 +20,12 @@ $().ready(function () {
 
 //加载个人课程
 function loadPersonalClass() {
-    let s_id = $("#user").val();
+    let s_id = localStorage.getItem('user');
     $.ajax({
         type: 'POST',
         url:'/user/B_Subject',
         data:{
-            s_id: s_id
+            s_id: localStorage.getItem('user')
         },
         async: false,
         dataType: 'text',
@@ -64,12 +64,11 @@ function loadPersonalClass() {
 
 
 function deleteSubject(c_id) {
-    let s_id = $("#user").val();
     $.ajax({
         type: 'POST',
         url: '/user/quitCourse',
         data: {
-            sId: s_id,
+            sId: localStorage.getItem('user'),
             cId: c_id
         },
         success: function (result) {

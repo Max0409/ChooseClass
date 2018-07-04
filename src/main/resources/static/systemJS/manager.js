@@ -39,7 +39,7 @@ function addCourse() {
     
     $.ajax({
         type: 'POST',
-        url: '/addCourse',
+        url: '/user/managerAddSubject',
         contentType: 'application/json',
         data: JSON.stringify(course),
         success: function (result) {
@@ -62,9 +62,11 @@ function addCourse() {
 
 function loadAllCourse() {
     $.ajax({
-        type: 'GET',
-        url: '/getAllCourses',
-        data: {},
+        type: 'POST',
+        url: '/user/B_Subject',
+        data: {
+            s_id: localStorage.getItem("user")
+        },
         dataType: 'text',
         success: function (result) {
             let resultList = parseXML(result).getElementsByTagName("b:课程");

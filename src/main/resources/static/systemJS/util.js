@@ -26,7 +26,7 @@ function checkChoice(s_id, c_id) {
         },
         async: false,
         success: function (result) {
-            console.log(result)
+            console.log(result);
             isChoice = result;
         },
         error: function (xhr) {

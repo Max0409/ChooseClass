@@ -144,7 +144,7 @@ function getShareCourses(dep) {
 
 //选课
 function chooseClass(c_id) {
-    let s_id = $("#user").val();
+    let s_id = localStorage.getItem('user');
     $.ajax({
         type: 'POST',
         url: '/user/chooseCourse',
