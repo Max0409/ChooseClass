@@ -283,6 +283,7 @@ manager登录
 
 
             Subject subject=new Subject( id, name, time, score,  teacher, location, share);
+            subject.setChosen("false");
             subjectRepository.save(subject);
 
 
@@ -520,10 +521,21 @@ manager登录
     public boolean isChoose(String s_id, String c_id) {
 
         try{
-            if (choiceRepository.findBySIdAndCId(s_id,c_id)!=null)
-            return true;
-            else
+            System.out.println(s_id);
+            System.out.println(c_id);
+//            System.out.println(choiceRepository.findBySIdAndCId("b000001","b001"));
+
+            if (choiceRepository.findBySIdAndCId(s_id,c_id)!=null){
+
+                System.out.println("true");
+                return true;
+            }
+
+            else {
+                System.out.println("false");
+
                 return false;
+            }
         }catch (Exception e){
             return  false;
         }

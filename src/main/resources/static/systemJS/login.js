@@ -13,11 +13,8 @@ $('#login').click(
                 password: password
             },
             success: function (result) {
-                $('#stuLogin').hide();
-                $('#manLogin').hide();
-                document.getElementById("user").innerText = s_id;
-                $('#welcomeUser').show();
                 localStorage.setItem('user', s_id);
+                window.location.href = "index.html";
             },
             error: function (xhr) {
                 console.log(xhr);

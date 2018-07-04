@@ -1,5 +1,5 @@
 $().ready(function () {
-    // check();
+    check();
     $('#all').click();
 });
 
@@ -49,7 +49,7 @@ function addCourse() {
         },
         success: function (result) {
             console.log(result);
-            if (result === "true") {
+            if (result) {
                 alert("添加成功！");
                 window.location.reload();
             } else {

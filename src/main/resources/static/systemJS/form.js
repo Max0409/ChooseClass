@@ -1,5 +1,5 @@
 $().ready(function () {
-    // check();
+    check();
     $('#own').click();
 });
 

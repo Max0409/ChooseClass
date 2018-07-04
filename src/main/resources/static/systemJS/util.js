@@ -21,7 +21,7 @@ function checkChoice(s_id, c_id) {
         type: 'POST',
         url: '/user/isChoose',
         data: {
-            s_id: s_id,
+            s_id: localStorage.getItem('user'),
             c_id: c_id,
         },
         async: false,
