@@ -14,7 +14,7 @@ $('#login').click(
             },
             success: function (result) {
                 $('#stuLogin').hide();
-                $('#managerLogin').hide();
+                $('#manLogin').hide();
                 document.getElementById("user").innerText = s_id;
                 $('#welcomeUser').show();
                 localStorage.setItem('user', s_id);

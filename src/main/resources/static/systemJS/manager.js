@@ -28,20 +28,25 @@ $('#addCourse').click(function () {
 });
 
 function addCourse() {
-    let course = {};
-    course.Cnm = $('#name').val();
-    course.Ctm = parseInt($('#period').val());
-    course.Cpt = parseInt($('#credit').val());
-    course.Tec = $('#teacher').val();
-    course.Pla = $('#location').val();
-    course.Share = $('input[name="share"]:checked').val();
+    let name = $('#name').val();
+    let time = parseInt($('#period').val());
+    let score = parseInt($('#credit').val());
+    let teacher = $('#teacher').val();
+    let location = $('#location').val();
+    let share = $('input[name="share"]:checked').val();
 
     
     $.ajax({
         type: 'POST',
         url: '/user/managerAddSubject',
-        contentType: 'application/json',
-        data: JSON.stringify(course),
+        data: {
+            name: name,
+            time: time,
+            score: score,
+            teacher: teacher,
+            location: location,
+            share: share
+        },
         success: function (result) {
             console.log(result);
             if (result === "true") {
@@ -73,7 +78,7 @@ function loadAllCourse() {
             for (let i = 0; i < resultList.length; i++) {
                 let share = "";
                 let color = "lightskyblue";
-                if (resultList[i].getElementsByTagName("b:Share")[0].firstChild.nodeValue === "Y") {
+                if (resultList[i].getElementsByTagName("b:共享")[0].firstChild.nodeValue === "Y") {
                     share = "已共享";
                 } else {
                     share = "未共享";
